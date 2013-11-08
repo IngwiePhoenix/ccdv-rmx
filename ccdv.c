@@ -267,18 +267,18 @@ Extension(const char *path)
 static void
 Usage(void)
 {
-	fprintf(stderr, "Usage: ccdv /path/to/cc CFLAGS...\n\n");
-	fprintf(stderr, "I wrote this to reduce the deluge Make output to make finding actual problems\n");
-	fprintf(stderr, "easier.  It is intended to be invoked from Makefiles, like this.  Instead of:\n\n");
-	fprintf(stderr, "\t.c.o:\n");
-	fprintf(stderr, "\t\t$(CC) $(CFLAGS) $(DEFS) $(CPPFLAGS) $< -c\n");
-	fprintf(stderr, "\nRewrite your rule so it looks like:\n\n");
-	fprintf(stderr, "\t.c.o:\n");
-	fprintf(stderr, "\t\t@ccdv $(CC) $(CFLAGS) $(DEFS) $(CPPFLAGS) $< -c\n\n");
-	fprintf(stderr, "ccdv 1.1.0 is Free under the GNU Public License.  Enjoy!\n");
-	fprintf(stderr, "  -- Mike Gleason, NcFTP Software <http://www.ncftp.com>\n");
-	fprintf(stderr, "  -- Edited by Ingwie Phoenix, 2013 <http://ingwie.me>\n");
-	exit(96);
+	fprintf(stdout, "Usage: ccdv /path/to/cc CFLAGS...\n\n");
+	fprintf(stdout, "I wrote this to reduce the deluge Make output to make finding actual problems\n");
+	fprintf(stdout, "easier.  It is intended to be invoked from Makefiles, like this.  Instead of:\n\n");
+	fprintf(stdout, "\t.c.o:\n");
+	fprintf(stdout, "\t\t$(CC) $(CFLAGS) $(DEFS) $(CPPFLAGS) $< -c\n");
+	fprintf(stdout, "\nRewrite your rule so it looks like:\n\n");
+	fprintf(stdout, "\t.c.o:\n");
+	fprintf(stdout, "\t\t@ccdv $(CC) $(CFLAGS) $(DEFS) $(CPPFLAGS) $< -c\n\n");
+	fprintf(stdout, "ccdv 1.1.0 is Free under the GNU Public License.  Enjoy!\n");
+	fprintf(stdout, "  -- Mike Gleason, NcFTP Software <http://www.ncftp.com>\n");
+	fprintf(stdout, "  -- Edited by Ingwie Phoenix, 2013 <http://ingwie.me>\n");
+	exit(0);
 }	/* Usage */
 
 
@@ -346,6 +346,7 @@ main(int argc, char **argv)
 	if ((devnull != 0) && (dup2(devnull, 0) == 0))
 		close(devnull);
 
+	// fork logic
 	gCCPID = (int) fork();
 	if (gCCPID < 0) {
 		(void) close(pipe1[0]);
@@ -362,7 +363,7 @@ main(int argc, char **argv)
 		(void) dup2(1, 2);		/* use write end on stderr */
 		execvp(argv[1], argv + 1);
 		perror(argv[1]);
-		exit(99);
+		exit(0);
 	}
 
 	/* parent */
