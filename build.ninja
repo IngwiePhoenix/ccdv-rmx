@@ -1,0 +1,15 @@
+rule cc
+  command = gcc $in -o $out
+  description = CC: $out
+rule cp
+  command = cp $in
+  description = ACTION: $out
+rule rm
+  command = rm $in
+  description = DELETING: $in
+
+build ccdv: cc ccdv.c
+build install: cp ccdv /usr/local/bin
+build clean: rm ccdv
+default ccdv
+
